@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>九九アプリ</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; }
+    button { margin: 5px; padding: 10px; font-size: 18px; }
+    .question { font-size: 24px; margin: 20px; }
+    .choices button { display: block; margin: 10px auto; width: 200px; }
+  </style>
+</head>
+<body>
+  <h1>九九アプリ</h1>
+
+  <div id="menu">
+    <h2>段を選んでください</h2>
+    <div id="buttons"></div>
+  </div>
+
+  <div id="quiz" style="display:none;">
+    <div class="question" id="question"></div>
+    <div class="choices" id="choices"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
