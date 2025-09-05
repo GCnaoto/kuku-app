@@ -1,72 +1,33 @@
-/* ページ全体 */
 body {
-  font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
   text-align: center;
-  background: #f9f9f9;
+  background: linear-gradient(120deg, #e3eafc 0%, #f7fafd 100%);
+  color: #222;
   margin: 0;
+  min-height: 100vh;
   padding: 20px;
-  color: #333;
 }
-
 /* タイトル */
 h1 {
-  font-size: 2em;
-  margin-bottom: 20px;
-  color: #0066cc;
+  margin-top: 24px;
+  font-size: 2.2em;
+  color: #3a5ca8;
+  text-shadow: 0 2px 8px #e3eafc;
 }
-
-/* セクションタイトル */
-h2 {
-  font-size: 1.5em;
-  margin: 15px 0;
-}
-
-/* 段の選択ボタン */
-#buttons button {
-  margin: 8px;
-  padding: 12px 20px;
-  font-size: 18px;
+button {
+  margin: 10px;
+  padding: 14px 28px;
+  font-size: 1.1em;
+  border-radius: 14px;
   border: none;
-  border-radius: 8px;
-  background: #4CAF50;
-  color: white;
+  background: #4b6cb7;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(60,80,120,0.08);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
-
-#buttons button:hover {
-  background: #45a049;
-}
-
-/* 問題文 */
-.question {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 20px 0;
-}
-
-/* 選択肢ボタン */
-.choices button {
-  display: block;
-  margin: 10px auto;
-  padding: 12px;
-  font-size: 18px;
-  border: none;
-  border-radius: 8px;
-  width: 200px;
-  background: #2196F3;
-  color: white;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.choices button:hover {
-  background: #1976D2;
-}
-
-/* クリア・エラー表示用 */
-.result {
-  font-size: 20px;
-  margin: 20px;
-  color: #d32f2f;
+button:hover {
+  background: #35508a;
+  transform: scale(1.04);
 }

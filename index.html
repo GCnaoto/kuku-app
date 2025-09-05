@@ -12,17 +12,14 @@
   </style>
 </head>
 <body>
-  <h1>九九アプリ</h1>
+  <h1>くく　べんきょうアプリ</h1>
 
-  <div id="menu">
-    <h2>段を選んでください</h2>
-    <div id="buttons"></div>
+  <div id="home">
+    <button onclick="showKukuList()">くくの　いちらん</button>
+    <button onclick="showKukuOrderQuiz()">じゅんばんに　とく</button>
+    <button onclick="showKukuRandomQuiz()">ばらばらに　とく</button>
   </div>
-
-  <div id="quiz" style="display:none;">
-    <div class="question" id="question"></div>
-    <div class="choices" id="choices"></div>
-  </div>
+  <div id="app" style="display:none;"></div>
 
   <script src="script.js"></script>
 </body>
