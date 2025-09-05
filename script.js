@@ -51,6 +51,10 @@ function renderKukuList(dan) {
   }
   html += '</table>';
   document.getElementById('kuku-list').innerHTML = html;
+  setTimeout(function() {
+    const list = document.getElementById('kuku-list');
+    if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
 }
 function numToKana(num) {
   const table = ['','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
@@ -156,6 +160,11 @@ function answerOrderQuiz(ans) {
     renderOrderQuiz();
   } else {
     // 間違えたら最初から
+    // ミス記録
+    let missed = JSON.parse(localStorage.getItem('missedKuku')||'{}');
+    let key = `${dan}x${index}`;
+    missed[key] = (missed[key]||0)+1;
+    localStorage.setItem('missedKuku', JSON.stringify(missed));
     orderQuizState.index = 1;
     orderQuizState.correctCount = 0;
     document.getElementById('order-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！さいしょから　やりなおし</div><button onclick=\"renderOrderQuiz()\">もういちど　ちょうせんする</button>`;
@@ -274,10 +283,15 @@ function answerRandomQuiz(ans) {
     renderRandomQuiz();
   } else {
     // 間違えたら最初から
-    let order = [];
-    for(let i=1;i<=9;i++) order.push(i);
-    order = shuffle(order);
-    randomQuizState.order = order;
+    // ミス記録
+    let missed = JSON.parse(localStorage.getItem('missedKuku')||'{}');
+    let key = `${dan}x${order[current]}`;
+    missed[key] = (missed[key]||0)+1;
+    localStorage.setItem('missedKuku', JSON.stringify(missed));
+    let orderArr = [];
+    for(let i=1;i<=9;i++) orderArr.push(i);
+    orderArr = shuffle(orderArr);
+    randomQuizState.order = orderArr;
     randomQuizState.current = 0;
     randomQuizState.correctCount = 0;
     document.getElementById('random-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！さいしょから　やりなおし</div><button onclick=\"renderRandomQuiz()\">もういちど　ちょうせんする</button>`;
@@ -301,8 +315,45 @@ function backHome() {
     btn.onclick = function() {
       localStorage.removeItem('orderQuizCleared');
       localStorage.removeItem('randomQuizCleared');
+      localStorage.removeItem('missedKuku');
       location.reload();
     };
     document.getElementById('home').appendChild(btn);
   }
+  // ランキングボタンがなければ追加
+  if (!document.getElementById('missed-ranking-btn')) {
+    const btn = document.createElement('button');
+    btn.id = 'missed-ranking-btn';
+    btn.textContent = 'まちがえやすい問題ランキング';
+    btn.style.marginTop = '16px';
+    btn.onclick = showMissedRanking;
+    document.getElementById('home').appendChild(btn);
+  }
+
+function showMissedRanking() {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  let missed = {};
+  try {
+    missed = JSON.parse(localStorage.getItem('missedKuku')||'{}');
+  } catch(e) {}
+  let byDan = {};
+  Object.keys(missed).forEach(key => {
+    let [dan, b] = key.split('x').map(Number);
+    if (!byDan[dan]) byDan[dan] = [];
+    byDan[dan].push({ b, count: missed[key] });
+  });
+  let html = `<h2>まちがえやすい問題ランキング</h2>`;
+  for(let dan=1;dan<=9;dan++){
+    if (!byDan[dan] || byDan[dan].length === 0) continue;
+    html += `<h3>${dan}だん</h3><table style='margin:auto;'><tr><th>問題</th><th>回数</th></tr>`;
+    let sorted = byDan[dan].sort((a,b)=>b.count-a.count).slice(0,5);
+    sorted.forEach(item => {
+      html += `<tr><td>${dan} × ${item.b} = ${dan*item.b}</td><td>${item.count}回</td></tr>`;
+    });
+    html += `</table>`;
+  }
+  html += `<button onclick='backHome()'>ホームに　もどる</button>`;
+  document.getElementById('app').innerHTML = html;
+}
 }
