@@ -79,6 +79,10 @@ function showKukuOrderQuiz() {
 function startOrderQuiz(dan) {
   orderQuizState = { dan: dan, index: 1, correctCount: 0 };
   renderOrderQuiz();
+  setTimeout(function() {
+    const area = document.getElementById('order-quiz-area');
+    if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
 }
 function renderOrderQuiz() {
   const { dan, index, correctCount } = orderQuizState;
@@ -173,6 +177,10 @@ function startRandomQuiz(dan) {
   order = shuffle(order);
   randomQuizState = { dan: dan, order: order, current: 0, correctCount: 0 };
   renderRandomQuiz();
+  setTimeout(function() {
+    const area = document.getElementById('random-quiz-area');
+    if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
 }
 function renderRandomQuiz() {
   const { dan, order, current, correctCount } = randomQuizState;

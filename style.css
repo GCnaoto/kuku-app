@@ -1,3 +1,52 @@
+@media (max-width: 600px) {
+  body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  #home, #app {
+    margin-top: 8vh;
+    margin-bottom: 8vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+  }
+  h1 {
+    font-size: 10vw;
+    margin-top: 6vw;
+    margin-bottom: 6vw;
+  }
+  h2, h3 {
+    font-size: 8vw;
+    margin-top: 4vw;
+    margin-bottom: 4vw;
+  }
+  button, .choices button {
+    width: 96vw;
+    font-size: 9vw;
+    padding: 6vw 0;
+    margin: 4vw 0;
+    border-radius: 6vw;
+    min-height: 70px;
+  }
+  table, td {
+    font-size: 6vw;
+    padding: 4vw 2vw;
+  }
+  .question {
+    font-size: 8vw;
+    margin: 6vw 0;
+  }
+  .progress, .clear, .error {
+    font-size: 7vw;
+    margin: 4vw 0;
+  }
+}
+
 body {
   font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
   text-align: center;
