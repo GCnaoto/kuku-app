@@ -109,10 +109,32 @@ function renderOrderQuiz() {
   if (!dan) return;
   let a = dan, b = index;
   let answer = a * b;
+  let wrongs = [];
+  // 近い値
+  if (answer > 1 && !wrongs.includes(answer-1)) wrongs.push(answer-1);
+  if (answer < 81 && !wrongs.includes(answer+1)) wrongs.push(answer+1);
+  // 同じ段の他の答え
+  for(let i=1;i<=9;i++) {
+    let val = a*i;
+    if (val !== answer && !wrongs.includes(val)) wrongs.push(val);
+    if (wrongs.length >= 6) break;
+  }
+  // 一桁違い
+  let s = answer.toString();
+  if (s.length > 1) {
+    let alt = parseInt(s[0]+((parseInt(s[1])+1)%10));
+    if (!isNaN(alt) && alt !== answer && !wrongs.includes(alt)) wrongs.push(alt);
+  }
+  // ランダム
+  while (wrongs.length < 10) {
+    let r = Math.floor(Math.random()*81)+1;
+    if (r !== answer && !wrongs.includes(r)) wrongs.push(r);
+  }
   let choices = [answer];
   while (choices.length < 4) {
-    let wrong = Math.floor(Math.random()*81)+1;
-    if (wrong !== answer && !choices.includes(wrong)) choices.push(wrong);
+    let idx = Math.floor(Math.random()*wrongs.length);
+    let wrong = wrongs[idx];
+    if (!choices.includes(wrong)) choices.push(wrong);
   }
   choices = shuffle(choices);
   let fullYomi = kukuYomi[a][b-1] || `${numToKana(a)} かける ${numToKana(b)} は？`;
@@ -206,10 +228,32 @@ function renderRandomQuiz() {
   if (!dan) return;
   let b = order[current];
   let answer = dan * b;
+  let wrongs = [];
+  // 近い値
+  if (answer > 1 && !wrongs.includes(answer-1)) wrongs.push(answer-1);
+  if (answer < 81 && !wrongs.includes(answer+1)) wrongs.push(answer+1);
+  // 同じ段の他の答え
+  for(let i=1;i<=9;i++) {
+    let val = dan*i;
+    if (val !== answer && !wrongs.includes(val)) wrongs.push(val);
+    if (wrongs.length >= 6) break;
+  }
+  // 一桁違い
+  let s = answer.toString();
+  if (s.length > 1) {
+    let alt = parseInt(s[0]+((parseInt(s[1])+1)%10));
+    if (!isNaN(alt) && alt !== answer && !wrongs.includes(alt)) wrongs.push(alt);
+  }
+  // ランダム
+  while (wrongs.length < 10) {
+    let r = Math.floor(Math.random()*81)+1;
+    if (r !== answer && !wrongs.includes(r)) wrongs.push(r);
+  }
   let choices = [answer];
   while (choices.length < 4) {
-    let wrong = Math.floor(Math.random()*81)+1;
-    if (wrong !== answer && !choices.includes(wrong)) choices.push(wrong);
+    let idx = Math.floor(Math.random()*wrongs.length);
+    let wrong = wrongs[idx];
+    if (!choices.includes(wrong)) choices.push(wrong);
   }
   choices = shuffle(choices);
   let fullYomi = kukuYomi[dan][b-1] || `${numToKana(dan)} かける ${numToKana(b)} は？`;
