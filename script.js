@@ -8,9 +8,9 @@ function showKukuList() {
   // クリア済み段情報取得
   let cleared = [];
   try {
-    cleared = JSON.parse(localStorage.getItem('orderQuizCleared')||'[]');
-  } catch(e) {}
-  for(let i=1;i<=9;i++){
+    cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
+  } catch (e) { }
+  for (let i = 1; i <= 9; i++) {
     const wrapper = document.createElement('div');
     wrapper.style.display = 'inline-block';
     wrapper.style.textAlign = 'center';
@@ -31,34 +31,34 @@ function showKukuList() {
   }
 }
 const kukuYomi = {
-  1: ['いん いち が いち','いん に が に','いん さん が さん','いん し が し','いん ご が ご','いん ろく が ろく','いん しち が しち','いん はち が はち','いん く が く'],
-  2: ['に いち が に','に にん が し','に さん が ろく','に し が はち','に ご じゅう','に ろく じゅうに','に しち じゅうし','に はち じゅうろく','に く じゅうはち'],
-  3: ['さん いち が さん','さん に が ろく','さ ざん が く','さん し じゅうに','さん ご じゅうご','さぶ ろく じゅうはち','さん しち にじゅういち','さん ぱ にじゅうし','さん く にじゅうしち'],
-  4: ['し いち が し','し に が はち','し さん じゅうに','し し じゅうろく','し ご にじゅう','し ろく にじゅうし','し しち にじゅうはち','し は さんじゅうに','し く さんじゅうろく'],
-  5: ['ご いち が ご','ご に じゅう','ご さん じゅうご','ご し にじゅう','ご ご にじゅうご','ご ろく さんじゅう','ご しち さんじゅうご','ご は しじゅう','ごっ く しじゅうご'],
-  6: ['ろく いち が ろく','ろく に じゅうに','ろく さん じゅうはち','ろく し にじゅうし','ろく ご さんじゅう','ろく ろく さんじゅうろく','ろく しち しじゅうに','ろく は しじゅうはち','ろっ く ごじゅうし'],
-  7: ['しち いち が しち','しち に じゅうし','しち さん にじゅういち','しち し にじゅうはち','しち ご さんじゅうご','しち ろく しじゅうに','しち しち しじゅうく','しち は ごじゅうろく','しち く ろくじゅうさん'],
-  8: ['はち いち が はち','はち に じゅうろく','はっ さん にじゅうし','はち し さんじゅうに','はち ご しじゅう','はち ろく しじゅうはち','はち しち ごじゅうろく','はっ ぱ ろくじゅうし','はっ く しちじゅうに'],
-  9: ['く いち が く','く に じゅうはち','く さん にじゅうしち','く し さんじゅうろく','く ご しじゅうご','く ろく ごじゅうし','く しち ろくじゅうさん','く は しちじゅうに','く く はちじゅういち']
+  1: ['いん いち が いち', 'いん に が に', 'いん さん が さん', 'いん し が し', 'いん ご が ご', 'いん ろく が ろく', 'いん しち が しち', 'いん はち が はち', 'いん く が く'],
+  2: ['に いち が に', 'に にん が し', 'に さん が ろく', 'に し が はち', 'に ご じゅう', 'に ろく じゅうに', 'に しち じゅうし', 'に はち じゅうろく', 'に く じゅうはち'],
+  3: ['さん いち が さん', 'さん に が ろく', 'さ ざん が く', 'さん し じゅうに', 'さん ご じゅうご', 'さぶ ろく じゅうはち', 'さん しち にじゅういち', 'さん ぱ にじゅうし', 'さん く にじゅうしち'],
+  4: ['し いち が し', 'し に が はち', 'し さん じゅうに', 'し し じゅうろく', 'し ご にじゅう', 'し ろく にじゅうし', 'し しち にじゅうはち', 'し は さんじゅうに', 'し く さんじゅうろく'],
+  5: ['ご いち が ご', 'ご に じゅう', 'ご さん じゅうご', 'ご し にじゅう', 'ご ご にじゅうご', 'ご ろく さんじゅう', 'ご しち さんじゅうご', 'ご は しじゅう', 'ごっ く しじゅうご'],
+  6: ['ろく いち が ろく', 'ろく に じゅうに', 'ろく さん じゅうはち', 'ろく し にじゅうし', 'ろく ご さんじゅう', 'ろく ろく さんじゅうろく', 'ろく しち しじゅうに', 'ろく は しじゅうはち', 'ろっ く ごじゅうし'],
+  7: ['しち いち が しち', 'しち に じゅうし', 'しち さん にじゅういち', 'しち し にじゅうはち', 'しち ご さんじゅうご', 'しち ろく しじゅうに', 'しち しち しじゅうく', 'しち は ごじゅうろく', 'しち く ろくじゅうさん'],
+  8: ['はち いち が はち', 'はち に じゅうろく', 'はっ さん にじゅうし', 'はち し さんじゅうに', 'はち ご しじゅう', 'はち ろく しじゅうはち', 'はち しち ごじゅうろく', 'はっ ぱ ろくじゅうし', 'はっ く しちじゅうに'],
+  9: ['く いち が く', 'く に じゅうはち', 'く さん にじゅうしち', 'く し さんじゅうろく', 'く ご しじゅうご', 'く ろく ごじゅうし', 'く しち ろくじゅうさん', 'く は しちじゅうに', 'く く はちじゅういち']
 };
 
 function renderKukuList(dan) {
   let html = `<h3>${dan}だん</h3><table style=\"margin:auto;\">`;
-  for(let i=1;i<=9;i++){
-    let kuku = `${dan} × ${i} = ${dan*i}`;
-    let yomi = kukuYomi[dan][i-1] || '';
+  for (let i = 1; i <= 9; i++) {
+    let kuku = `${dan} × ${i} = ${dan * i}`;
+    let yomi = kukuYomi[dan][i - 1] || '';
     html += `<tr><td>${kuku}</td><td>${yomi}</td></tr>`;
   }
   html += '</table>';
   document.getElementById('kuku-list').innerHTML = html;
-  setTimeout(function() {
+  setTimeout(function () {
     const list = document.getElementById('kuku-list');
     if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
 }
 function numToKana(num) {
-  const table = ['','いち','に','さん','よん','ご','ろく','なな','はち','きゅう','じゅう','じゅういち','じゅうに','じゅうさん','じゅうよん','じゅうご','じゅうろく','じゅうなな','じゅうはち','じゅうきゅう','にじゅう'];
-  return table[num]||num;
+  const table = ['', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう', 'じゅう', 'じゅういち', 'じゅうに', 'じゅうさん', 'じゅうよん', 'じゅうご', 'じゅうろく', 'じゅうなな', 'じゅうはち', 'じゅうきゅう', 'にじゅう'];
+  return table[num] || num;
 }
 // 九九順問題
 let orderQuizState = { dan: null, index: 1, correctCount: 0 };
@@ -68,10 +68,10 @@ function showKukuOrderQuiz() {
   // 順問題クリア記録取得
   let cleared = [];
   try {
-    cleared = JSON.parse(localStorage.getItem('orderQuizCleared')||'[]');
-  } catch(e) {}
+    cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
+  } catch (e) { }
   let btns = '';
-  for(let i=1;i<=9;i++){
+  for (let i = 1; i <= 9; i++) {
     btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
     if (cleared.includes(i)) {
       btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
@@ -83,7 +83,7 @@ function showKukuOrderQuiz() {
 function startOrderQuiz(dan) {
   orderQuizState = { dan: dan, index: 1, correctCount: 0 };
   renderOrderQuiz();
-  setTimeout(function() {
+  setTimeout(function () {
     const area = document.getElementById('order-quiz-area');
     if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
@@ -96,10 +96,10 @@ function renderOrderQuiz() {
     // 段ボタンリスト再描画
     let cleared = [];
     try {
-      cleared = JSON.parse(localStorage.getItem('orderQuizCleared')||'[]');
-    } catch(e) {}
+      cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
+    } catch (e) { }
     let btns = '';
-    for(let i=1;i<=9;i++){
+    for (let i = 1; i <= 9; i++) {
       btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
       if (cleared.includes(i)) {
         btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
@@ -115,40 +115,40 @@ function renderOrderQuiz() {
   let answer = a * b;
   let wrongs = [];
   // 近い値
-  if (answer > 1 && !wrongs.includes(answer-1)) wrongs.push(answer-1);
-  if (answer < 81 && !wrongs.includes(answer+1)) wrongs.push(answer+1);
+  if (answer > 1 && !wrongs.includes(answer - 1)) wrongs.push(answer - 1);
+  if (answer < 81 && !wrongs.includes(answer + 1)) wrongs.push(answer + 1);
   // 同じ段の他の答え
-  for(let i=1;i<=9;i++) {
-    let val = a*i;
+  for (let i = 1; i <= 9; i++) {
+    let val = a * i;
     if (val !== answer && !wrongs.includes(val)) wrongs.push(val);
     if (wrongs.length >= 6) break;
   }
   // 一桁違い
   let s = answer.toString();
   if (s.length > 1) {
-    let alt = parseInt(s[0]+((parseInt(s[1])+1)%10));
+    let alt = parseInt(s[0] + ((parseInt(s[1]) + 1) % 10));
     if (!isNaN(alt) && alt !== answer && !wrongs.includes(alt)) wrongs.push(alt);
   }
   // ランダム
   while (wrongs.length < 10) {
-    let r = Math.floor(Math.random()*81)+1;
+    let r = Math.floor(Math.random() * 81) + 1;
     if (r !== answer && !wrongs.includes(r)) wrongs.push(r);
   }
   let choices = [answer];
   while (choices.length < 4) {
-    let idx = Math.floor(Math.random()*wrongs.length);
+    let idx = Math.floor(Math.random() * wrongs.length);
     let wrong = wrongs[idx];
     if (!choices.includes(wrong)) choices.push(wrong);
   }
   choices = shuffle(choices);
-  let fullYomi = kukuYomi[a][b-1] || `${numToKana(a)} かける ${numToKana(b)} は？`;
+  let fullYomi = kukuYomi[a][b - 1] || `${numToKana(a)} かける ${numToKana(b)} は？`;
   let yomi = fullYomi.split(/\s*(が|じゅう|にじゅう|さんじゅう|しじゅう|ごじゅう|ろくじゅう|しちじゅう|はちじゅう)/)[0].trim();
   // ...進捗星リスト削除...
   let html = `<h3>${a} × ${b} = ?</h3><div class='yomi'>${yomi}</div>`;
   choices.forEach(c => {
     html += `<button onclick=\"answerOrderQuiz(${c})\">${c}</button> `;
   });
-  html += `<div class='progress'>あと ${9-correctCount}もん！</div>`;
+  html += `<div class='progress'>あと ${9 - correctCount}もん！</div>`;
   document.getElementById('order-quiz-area').innerHTML = html;
 }
 function answerOrderQuiz(ans) {
@@ -161,24 +161,25 @@ function answerOrderQuiz(ans) {
   } else {
     // 間違えたら最初から
     // ミス記録
-    let missed = JSON.parse(localStorage.getItem('missedKuku')||'{}');
+    let missed = JSON.parse(localStorage.getItem('missedKuku') || '{}');
     let key = `${dan}x${index}`;
-    missed[key] = (missed[key]||0)+1;
+    missed[key] = (missed[key] || 0) + 1;
     localStorage.setItem('missedKuku', JSON.stringify(missed));
+    const correct = dan * index;
     orderQuizState.index = 1;
     orderQuizState.correctCount = 0;
-    document.getElementById('order-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！さいしょから　やりなおし</div><button onclick=\"renderOrderQuiz()\">もういちど　ちょうせんする</button>`;
+    document.getElementById('order-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${index} = ${correct}</b> だよ<br>さいしょから　やりなおし</div><button onclick=\"renderOrderQuiz()\">もういちど　ちょうせんする</button>`;
   }
 }
 function shuffle(arr) {
-  for(let i=arr.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
 }
 function saveOrderQuizClear(dan) {
-  let cleared = JSON.parse(localStorage.getItem('orderQuizCleared')||'[]');
+  let cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
   if (!cleared.includes(dan)) cleared.push(dan);
   localStorage.setItem('orderQuizCleared', JSON.stringify(cleared));
 }
@@ -190,10 +191,10 @@ function showKukuRandomQuiz() {
   // バラ問題クリア記録取得
   let cleared = [];
   try {
-    cleared = JSON.parse(localStorage.getItem('randomQuizCleared')||'[]');
-  } catch(e) {}
+    cleared = JSON.parse(localStorage.getItem('randomQuizCleared') || '[]');
+  } catch (e) { }
   let btns = '';
-  for(let i=1;i<=9;i++){
+  for (let i = 1; i <= 9; i++) {
     btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
     if (cleared.includes(i)) {
       btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
@@ -204,11 +205,11 @@ function showKukuRandomQuiz() {
 }
 function startRandomQuiz(dan) {
   let order = [];
-  for(let i=1;i<=9;i++) order.push(i);
+  for (let i = 1; i <= 9; i++) order.push(i);
   order = shuffle(order);
   randomQuizState = { dan: dan, order: order, current: 0, correctCount: 0 };
   renderRandomQuiz();
-  setTimeout(function() {
+  setTimeout(function () {
     const area = document.getElementById('random-quiz-area');
     if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
@@ -220,10 +221,10 @@ function renderRandomQuiz() {
     // 段ボタンリスト再描画
     let cleared = [];
     try {
-      cleared = JSON.parse(localStorage.getItem('randomQuizCleared')||'[]');
-    } catch(e) {}
+      cleared = JSON.parse(localStorage.getItem('randomQuizCleared') || '[]');
+    } catch (e) { }
     let btns = '';
-    for(let i=1;i<=9;i++){
+    for (let i = 1; i <= 9; i++) {
       btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
       if (cleared.includes(i)) {
         btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
@@ -239,39 +240,39 @@ function renderRandomQuiz() {
   let answer = dan * b;
   let wrongs = [];
   // 近い値
-  if (answer > 1 && !wrongs.includes(answer-1)) wrongs.push(answer-1);
-  if (answer < 81 && !wrongs.includes(answer+1)) wrongs.push(answer+1);
+  if (answer > 1 && !wrongs.includes(answer - 1)) wrongs.push(answer - 1);
+  if (answer < 81 && !wrongs.includes(answer + 1)) wrongs.push(answer + 1);
   // 同じ段の他の答え
-  for(let i=1;i<=9;i++) {
-    let val = dan*i;
+  for (let i = 1; i <= 9; i++) {
+    let val = dan * i;
     if (val !== answer && !wrongs.includes(val)) wrongs.push(val);
     if (wrongs.length >= 6) break;
   }
   // 一桁違い
   let s = answer.toString();
   if (s.length > 1) {
-    let alt = parseInt(s[0]+((parseInt(s[1])+1)%10));
+    let alt = parseInt(s[0] + ((parseInt(s[1]) + 1) % 10));
     if (!isNaN(alt) && alt !== answer && !wrongs.includes(alt)) wrongs.push(alt);
   }
   // ランダム
   while (wrongs.length < 10) {
-    let r = Math.floor(Math.random()*81)+1;
+    let r = Math.floor(Math.random() * 81) + 1;
     if (r !== answer && !wrongs.includes(r)) wrongs.push(r);
   }
   let choices = [answer];
   while (choices.length < 4) {
-    let idx = Math.floor(Math.random()*wrongs.length);
+    let idx = Math.floor(Math.random() * wrongs.length);
     let wrong = wrongs[idx];
     if (!choices.includes(wrong)) choices.push(wrong);
   }
   choices = shuffle(choices);
-  let fullYomi = kukuYomi[dan][b-1] || `${numToKana(dan)} かける ${numToKana(b)} は？`;
+  let fullYomi = kukuYomi[dan][b - 1] || `${numToKana(dan)} かける ${numToKana(b)} は？`;
   let yomi = fullYomi.split(/\s*(が|じゅう|にじゅう|さんじゅう|しじゅう|ごじゅう|ろくじゅう|しちじゅう|はちじゅう)/)[0].trim();
   let html = `<h3>${dan} × ${b} = ?</h3><div class='yomi'>${yomi}</div>`;
   choices.forEach(c => {
     html += `<button onclick=\"answerRandomQuiz(${c})\">${c}</button> `;
   });
-  html += `<div class='progress'>あと ${9-correctCount}もん！</div>`;
+  html += `<div class='progress'>あと ${9 - correctCount}もん！</div>`;
   document.getElementById('random-quiz-area').innerHTML = html;
 }
 function answerRandomQuiz(ans) {
@@ -284,21 +285,22 @@ function answerRandomQuiz(ans) {
   } else {
     // 間違えたら最初から
     // ミス記録
-    let missed = JSON.parse(localStorage.getItem('missedKuku')||'{}');
+    let missed = JSON.parse(localStorage.getItem('missedKuku') || '{}');
     let key = `${dan}x${order[current]}`;
-    missed[key] = (missed[key]||0)+1;
+    missed[key] = (missed[key] || 0) + 1;
     localStorage.setItem('missedKuku', JSON.stringify(missed));
+    const correct = dan * order[current];
     let orderArr = [];
-    for(let i=1;i<=9;i++) orderArr.push(i);
+    for (let i = 1; i <= 9; i++) orderArr.push(i);
     orderArr = shuffle(orderArr);
     randomQuizState.order = orderArr;
     randomQuizState.current = 0;
     randomQuizState.correctCount = 0;
-    document.getElementById('random-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！さいしょから　やりなおし</div><button onclick=\"renderRandomQuiz()\">もういちど　ちょうせんする</button>`;
+    document.getElementById('random-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${order[current]} = ${correct}</b> だよ<br>もう一回！</div><button onclick=\"renderRandomQuiz()\">もういちど　ちょうせんする</button>`;
   }
 }
 function saveRandomQuizClear(dan) {
-  let cleared = JSON.parse(localStorage.getItem('randomQuizCleared')||'[]');
+  let cleared = JSON.parse(localStorage.getItem('randomQuizCleared') || '[]');
   if (!cleared.includes(dan)) cleared.push(dan);
   localStorage.setItem('randomQuizCleared', JSON.stringify(cleared));
 }
@@ -312,7 +314,7 @@ function backHome() {
     btn.id = 'clear-record-btn';
     btn.textContent = 'せいかいきろくを　ぜんぶ　けす';
     btn.style.marginTop = '16px';
-    btn.onclick = function() {
+    btn.onclick = function () {
       localStorage.removeItem('orderQuizCleared');
       localStorage.removeItem('randomQuizCleared');
       localStorage.removeItem('missedKuku');
@@ -330,30 +332,30 @@ function backHome() {
     document.getElementById('home').appendChild(btn);
   }
 
-function showMissedRanking() {
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('app').style.display = '';
-  let missed = {};
-  try {
-    missed = JSON.parse(localStorage.getItem('missedKuku')||'{}');
-  } catch(e) {}
-  let byDan = {};
-  Object.keys(missed).forEach(key => {
-    let [dan, b] = key.split('x').map(Number);
-    if (!byDan[dan]) byDan[dan] = [];
-    byDan[dan].push({ b, count: missed[key] });
-  });
-  let html = `<h2>まちがえやすい問題ランキング</h2>`;
-  for(let dan=1;dan<=9;dan++){
-    if (!byDan[dan] || byDan[dan].length === 0) continue;
-    html += `<h3>${dan}だん</h3><table style='margin:auto;'><tr><th>問題</th><th>回数</th></tr>`;
-    let sorted = byDan[dan].sort((a,b)=>b.count-a.count).slice(0,5);
-    sorted.forEach(item => {
-      html += `<tr><td>${dan} × ${item.b} = ${dan*item.b}</td><td>${item.count}回</td></tr>`;
+  function showMissedRanking() {
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('app').style.display = '';
+    let missed = {};
+    try {
+      missed = JSON.parse(localStorage.getItem('missedKuku') || '{}');
+    } catch (e) { }
+    let byDan = {};
+    Object.keys(missed).forEach(key => {
+      let [dan, b] = key.split('x').map(Number);
+      if (!byDan[dan]) byDan[dan] = [];
+      byDan[dan].push({ b, count: missed[key] });
     });
-    html += `</table>`;
+    let html = `<h2>まちがえやすい問題ランキング</h2>`;
+    for (let dan = 1; dan <= 9; dan++) {
+      if (!byDan[dan] || byDan[dan].length === 0) continue;
+      html += `<h3>${dan}だん</h3><table style='margin:auto;'><tr><th>問題</th><th>回数</th></tr>`;
+      let sorted = byDan[dan].sort((a, b) => b.count - a.count).slice(0, 5);
+      sorted.forEach(item => {
+        html += `<tr><td>${dan} × ${item.b} = ${dan * item.b}</td><td>${item.count}回</td></tr>`;
+      });
+      html += `</table>`;
+    }
+    html += `<button onclick='backHome()'>ホームに　もどる</button>`;
+    document.getElementById('app').innerHTML = html;
   }
-  html += `<button onclick='backHome()'>ホームに　もどる</button>`;
-  document.getElementById('app').innerHTML = html;
-}
 }
