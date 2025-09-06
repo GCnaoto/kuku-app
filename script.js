@@ -123,11 +123,16 @@ function renderOrderQuiz() {
     if (val !== answer && !wrongs.includes(val)) wrongs.push(val);
     if (wrongs.length >= 6) break;
   }
-  // 一桁違い
-  let s = answer.toString();
-  if (s.length > 1) {
-    let alt = parseInt(s[0] + ((parseInt(s[1]) + 1) % 10));
-    if (!isNaN(alt) && alt !== answer && !wrongs.includes(alt)) wrongs.push(alt);
+  // 4と7の入れ替えパターン
+  if (a === 4 || a === 7) {
+    let altA = a === 4 ? 7 : 4;
+    let altVal = altA * b;
+    if (altVal !== answer && !wrongs.includes(altVal)) wrongs.push(altVal);
+  }
+  if (b === 4 || b === 7) {
+    let altB = b === 4 ? 7 : 4;
+    let altVal = a * altB;
+    if (altVal !== answer && !wrongs.includes(altVal)) wrongs.push(altVal);
   }
   // ランダム
   while (wrongs.length < 10) {
@@ -248,11 +253,16 @@ function renderRandomQuiz() {
     if (val !== answer && !wrongs.includes(val)) wrongs.push(val);
     if (wrongs.length >= 6) break;
   }
-  // 一桁違い
-  let s = answer.toString();
-  if (s.length > 1) {
-    let alt = parseInt(s[0] + ((parseInt(s[1]) + 1) % 10));
-    if (!isNaN(alt) && alt !== answer && !wrongs.includes(alt)) wrongs.push(alt);
+  // 4と7の入れ替えパターン
+  if (dan === 4 || dan === 7) {
+    let altA = dan === 4 ? 7 : 4;
+    let altVal = altA * b;
+    if (altVal !== answer && !wrongs.includes(altVal)) wrongs.push(altVal);
+  }
+  if (b === 4 || b === 7) {
+    let altB = b === 4 ? 7 : 4;
+    let altVal = dan * altB;
+    if (altVal !== answer && !wrongs.includes(altVal)) wrongs.push(altVal);
   }
   // ランダム
   while (wrongs.length < 10) {
