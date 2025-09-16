@@ -64,13 +64,16 @@ function renderTenKey() {
   // テンキーUI
   let html = `<div id='tenkey-area' style='display:inline-block;'>`;
   const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 9; i++) {
     if (i % 3 === 0) html += '<div>';
     html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(${keys[i]})'>${keys[i]}</button>`;
     if (i % 3 === 2) html += '</div>';
   }
-  html += `<div><button style='width:60px;height:60px;font-size:1.2em;margin:4px;' onclick='pressTenKey(-1)'>⌫</button>`;
-  html += `<button style='width:128px;height:60px;font-size:1.2em;margin:4px;' onclick='submitInputQuiz()'>OK</button></div>`;
+  // 0とバックスペースを横並びで
+  html += `<div>`;
+  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(0)'>0</button>`;
+  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(-1)'>⌫</button>`;
+  html += `</div>`;
   html += `</div>`;
   return html;
 }
@@ -81,20 +84,29 @@ function pressTenKey(num) {
     renderInputQuiz();
     return;
   }
-  if (inputQuizState.input.length < 3) {
+  const { dan, order, current } = inputQuizState;
+  const b = order[current];
+  const answer = dan * b;
+  const answerLength = answer.toString().length;
+  if (inputQuizState.input.length < answerLength) {
     inputQuizState.input += num;
-    // 入力直後に正解判定
-    const { dan, order, current, input } = inputQuizState;
-    const b = order[current];
-    const answer = dan * b;
-    if (parseInt(inputQuizState.input, 10) === answer) {
-      // 正解なら自動で進む
-      inputQuizState.current++;
-      inputQuizState.correctCount++;
-      inputQuizState.input = '';
-      renderInputQuiz();
-      return;
+    // 桁数が揃ったら自動判定
+    if (inputQuizState.input.length === answerLength) {
+      if (parseInt(inputQuizState.input, 10) === answer) {
+        // 正解なら自動で進む
+        inputQuizState.current++;
+        inputQuizState.correctCount++;
+        inputQuizState.input = '';
+        renderInputQuiz();
+        return;
+      } else {
+        // 不正解ならsubmitInputQuiz()で既存の間違い処理
+        submitInputQuiz();
+        return;
+      }
     }
+    renderInputQuiz();
+    return;
   }
   renderInputQuiz();
 }
@@ -107,9 +119,23 @@ function submitInputQuiz() {
     inputQuizState.input = '';
     renderInputQuiz();
   } else {
+    // 間違えたら最初から
+    // ミス記録
+    let missed = {};
+    try {
+      missed = JSON.parse(localStorage.getItem('missedKuku') || '{}');
+    } catch (e) { }
+    let key = `${dan}x${order[current]}`;
+    missed[key] = (missed[key] || 0) + 1;
+    localStorage.setItem('missedKuku', JSON.stringify(missed));
+    let newOrder = [];
+    for (let i = 1; i <= 9; i++) newOrder.push(i);
+    newOrder = shuffle(newOrder);
+    inputQuizState.order = newOrder;
+    inputQuizState.current = 0;
+    inputQuizState.correctCount = 0;
     inputQuizState.input = '';
-    document.getElementById('input-quiz-area').innerHTML += `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${order[current]} = ${answer}</b> だよ</div>`;
-    setTimeout(renderInputQuiz, 1200);
+    document.getElementById('input-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${order[current]} = ${answer}</b> だよ<br>さいしょから　やりなおし</div><button onclick='renderInputQuiz()'>もういちど　ちょうせんする</button>`;
   }
 }
 function showKukuList() {
