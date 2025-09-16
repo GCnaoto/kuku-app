@@ -1,17 +1,40 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>九九アプリ</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="kuku.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="kuku.png">
+  <meta name="theme-color" content="#4b6cb7">
   <style>
-    body { font-family: sans-serif; text-align: center; }
-    button { margin: 5px; padding: 10px; font-size: 18px; }
-    .question { font-size: 24px; margin: 20px; }
-    .choices button { display: block; margin: 10px auto; width: 200px; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    .question {
+      font-size: 24px;
+      margin: 20px;
+    }
+
+    .choices button {
+      display: block;
+      margin: 10px auto;
+      width: 200px;
+    }
   </style>
 </head>
+
 <body>
   <h1>九九 べんきょうアプリ</h1>
 
@@ -19,9 +42,11 @@
     <button onclick="showKukuList()">くくの　いちらん</button>
     <button onclick="showKukuOrderQuiz()">じゅんばんに　とく</button>
     <button onclick="showKukuRandomQuiz()">ばらばらに　とく</button>
+    <button onclick="showKukuInputQuiz()">バラ九九（入力式）</button>
   </div>
   <div id="app" style="display:none;"></div>
 
   <script src="script.js"></script>
 </body>
+
 </html>

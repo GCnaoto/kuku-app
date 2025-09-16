@@ -1,3 +1,117 @@
+// --- バラ九九（入力式）用 段ごとレベル管理 ---
+function getInputQuizExpData() {
+  let expData = {};
+  try {
+    expData = JSON.parse(localStorage.getItem('inputQuizExp') || '{}');
+  } catch (e) { }
+  return expData;
+}
+function addInputQuizExp(dan) {
+  let expData = getInputQuizExpData();
+  expData[dan] = (expData[dan] || 0) + 1;
+  if (expData[dan] > 99) expData[dan] = 99;
+  localStorage.setItem('inputQuizExp', JSON.stringify(expData));
+}
+// --- バラ九九（入力式） ---
+let inputQuizState = { dan: null, order: [], current: 0, correctCount: 0, input: '' };
+function showKukuInputQuiz() {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  // 段選択ボタン
+  let expData = getInputQuizExpData();
+  let btns = '';
+  for (let i = 1; i <= 9; i++) {
+    const exp = expData[i] || 0;
+    const level = Math.min(100, exp + 1);
+    btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
+    btns += `<div style='color:#4b6cb7;font-size:1.1em;margin-bottom:2px;'>Lv.${level}</div>`;
+    btns += `<button onclick="startInputQuiz(${i})">${i}だん</button></div> `;
+  }
+  document.getElementById('app').innerHTML = `<h2>バラ九九（入力式）</h2><div>やりたい　だんを　えらんでね</div><div>${btns}</div><div id='input-quiz-area'></div><button onclick="backHome()">ホームに　もどる</button>`;
+}
+function startInputQuiz(dan) {
+  let order = [];
+  for (let i = 1; i <= 9; i++) order.push(i);
+  order = shuffle(order);
+  inputQuizState = { dan: dan, order: order, current: 0, correctCount: 0, input: '' };
+  renderInputQuiz();
+  setTimeout(function () {
+    const area = document.getElementById('input-quiz-area');
+    if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+function renderInputQuiz() {
+  const { dan, order, current, correctCount, input } = inputQuizState;
+  if (correctCount === 9) {
+    addInputQuizExp(dan);
+    showKukuInputQuiz();
+    document.getElementById('input-quiz-area').innerHTML = `<div class='clear'>${dan}だん　ぜんぶ　せいかい！すごいね！</div><button onclick=\"startInputQuiz(${dan})\">もういちど　ちょうせんする</button>`;
+    return;
+  }
+  if (!dan) return;
+  let b = order[current];
+  let html = `<h3>${dan} × ${b} = ?</h3>`;
+  // 読み方を追加
+  let fullYomi = (kukuYomi[dan] && kukuYomi[dan][b - 1]) || `${numToKana(dan)} かける ${numToKana(b)} は？`;
+  let yomi = fullYomi.split(/\s*(が|じゅう|にじゅう|さんじゅう|しじゅう|ごじゅう|ろくじゅう|しちじゅう|はちじゅう)/)[0].trim();
+  html += `<div class='yomi'>${yomi}</div>`;
+  html += `<div style='font-size:2em;margin:12px 0;'>${input || '&nbsp;'}</div>`;
+  html += renderTenKey();
+  html += `<div class='progress'>あと ${9 - correctCount}もん！</div>`;
+  document.getElementById('input-quiz-area').innerHTML = html;
+}
+function renderTenKey() {
+  // テンキーUI
+  let html = `<div id='tenkey-area' style='display:inline-block;'>`;
+  const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  for (let i = 0; i < 10; i++) {
+    if (i % 3 === 0) html += '<div>';
+    html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(${keys[i]})'>${keys[i]}</button>`;
+    if (i % 3 === 2) html += '</div>';
+  }
+  html += `<div><button style='width:60px;height:60px;font-size:1.2em;margin:4px;' onclick='pressTenKey(-1)'>⌫</button>`;
+  html += `<button style='width:128px;height:60px;font-size:1.2em;margin:4px;' onclick='submitInputQuiz()'>OK</button></div>`;
+  html += `</div>`;
+  return html;
+}
+function pressTenKey(num) {
+  if (num === -1) {
+    // バックスペース
+    inputQuizState.input = inputQuizState.input.slice(0, -1);
+    renderInputQuiz();
+    return;
+  }
+  if (inputQuizState.input.length < 3) {
+    inputQuizState.input += num;
+    // 入力直後に正解判定
+    const { dan, order, current, input } = inputQuizState;
+    const b = order[current];
+    const answer = dan * b;
+    if (parseInt(inputQuizState.input, 10) === answer) {
+      // 正解なら自動で進む
+      inputQuizState.current++;
+      inputQuizState.correctCount++;
+      inputQuizState.input = '';
+      renderInputQuiz();
+      return;
+    }
+  }
+  renderInputQuiz();
+}
+function submitInputQuiz() {
+  const { dan, order, current, input } = inputQuizState;
+  const answer = dan * order[current];
+  if (parseInt(input, 10) === answer) {
+    inputQuizState.current++;
+    inputQuizState.correctCount++;
+    inputQuizState.input = '';
+    renderInputQuiz();
+  } else {
+    inputQuizState.input = '';
+    document.getElementById('input-quiz-area').innerHTML += `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${order[current]} = ${answer}</b> だよ</div>`;
+    setTimeout(renderInputQuiz, 1200);
+  }
+}
 function showKukuList() {
   document.getElementById('home').style.display = 'none';
   document.getElementById('app').style.display = '';
