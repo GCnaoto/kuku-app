@@ -65,17 +65,17 @@ let orderQuizState = { dan: null, index: 1, correctCount: 0 };
 function showKukuOrderQuiz() {
   document.getElementById('home').style.display = 'none';
   document.getElementById('app').style.display = '';
-  // 順問題クリア記録取得
-  let cleared = [];
+  // 段ごとの経験値・レベル取得
+  let expData = {};
   try {
-    cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
+    expData = JSON.parse(localStorage.getItem('orderQuizExp') || '{}');
   } catch (e) { }
   let btns = '';
   for (let i = 1; i <= 9; i++) {
+    const exp = expData[i] || 0;
+    const level = Math.min(100, exp + 1); // 1回クリアごとにレベルUP, MAX100
     btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
-    if (cleared.includes(i)) {
-      btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
-    }
+    btns += `<div style='color:#4b6cb7;font-size:1.1em;margin-bottom:2px;'>Lv.${level}</div>`;
     btns += `<button onclick=\"startOrderQuiz(${i})\">${i}だん</button></div> `;
   }
   document.getElementById('app').innerHTML = `<h2>じゅんばんに　とく</h2><div>やりたい　だんを　えらんでね</div><div>${btns}</div><div id='order-quiz-area'></div><button onclick=\"backHome()\">ホームに　もどる</button>`;
@@ -92,18 +92,18 @@ function renderOrderQuiz() {
   const { dan, index, correctCount } = orderQuizState;
   if (correctCount === 9) {
     // クリア
-    saveOrderQuizClear(dan);
+    addOrderQuizExp(dan);
     // 段ボタンリスト再描画
-    let cleared = [];
+    let expData = {};
     try {
-      cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
+      expData = JSON.parse(localStorage.getItem('orderQuizExp') || '{}');
     } catch (e) { }
     let btns = '';
     for (let i = 1; i <= 9; i++) {
+      const exp = expData[i] || 0;
+      const level = Math.min(100, exp + 1);
       btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
-      if (cleared.includes(i)) {
-        btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
-      }
+      btns += `<div style='color:#4b6cb7;font-size:1.1em;margin-bottom:2px;'>Lv.${level}</div>`;
       btns += `<button onclick=\"startOrderQuiz(${i})\">${i}だん</button></div> `;
     }
     document.getElementById('app').innerHTML = `<h2>じゅんばんに　とく</h2><div>やりたい　だんを　えらんでね</div><div>${btns}</div><div id='order-quiz-area'></div><button onclick=\"backHome()\">ホームに　もどる</button>`;
@@ -183,27 +183,34 @@ function shuffle(arr) {
   }
   return arr;
 }
-function saveOrderQuizClear(dan) {
-  let cleared = JSON.parse(localStorage.getItem('orderQuizCleared') || '[]');
-  if (!cleared.includes(dan)) cleared.push(dan);
-  localStorage.setItem('orderQuizCleared', JSON.stringify(cleared));
+
+// 段ごとに経験値を加算し保存
+function addOrderQuizExp(dan) {
+  let expData = {};
+  try {
+    expData = JSON.parse(localStorage.getItem('orderQuizExp') || '{}');
+  } catch (e) { }
+  expData[dan] = (expData[dan] || 0) + 1;
+  // レベルMAX（100）を超える経験値は加算しない
+  if (expData[dan] > 99) expData[dan] = 99;
+  localStorage.setItem('orderQuizExp', JSON.stringify(expData));
 }
 // バラ九九問題
 let randomQuizState = { dan: null, order: [], current: 0, correctCount: 0 };
 function showKukuRandomQuiz() {
   document.getElementById('home').style.display = 'none';
   document.getElementById('app').style.display = '';
-  // バラ問題クリア記録取得
-  let cleared = [];
+  // 段ごとの経験値・レベル取得（バラ問題用）
+  let expData = {};
   try {
-    cleared = JSON.parse(localStorage.getItem('randomQuizCleared') || '[]');
+    expData = JSON.parse(localStorage.getItem('randomQuizExp') || '{}');
   } catch (e) { }
   let btns = '';
   for (let i = 1; i <= 9; i++) {
+    const exp = expData[i] || 0;
+    const level = Math.min(100, exp + 1); // 1回クリアごとにレベルUP, MAX100
     btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
-    if (cleared.includes(i)) {
-      btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
-    }
+    btns += `<div style='color:#4b6cb7;font-size:1.1em;margin-bottom:2px;'>Lv.${level}</div>`;
     btns += `<button onclick=\"startRandomQuiz(${i})\">${i}だん</button></div> `;
   }
   document.getElementById('app').innerHTML = `<h2>ばらばらに　とく</h2><div>やりたい　だんを　えらんでね</div><div>${btns}</div><div id='random-quiz-area'></div><button onclick=\"backHome()\">ホームに　もどる</button>`;
@@ -222,18 +229,18 @@ function startRandomQuiz(dan) {
 function renderRandomQuiz() {
   const { dan, order, current, correctCount } = randomQuizState;
   if (correctCount === 9) {
-    saveRandomQuizClear(dan);
+    addRandomQuizExp(dan);
     // 段ボタンリスト再描画
-    let cleared = [];
+    let expData = {};
     try {
-      cleared = JSON.parse(localStorage.getItem('randomQuizCleared') || '[]');
+      expData = JSON.parse(localStorage.getItem('randomQuizExp') || '{}');
     } catch (e) { }
     let btns = '';
     for (let i = 1; i <= 9; i++) {
+      const exp = expData[i] || 0;
+      const level = Math.min(100, exp + 1);
       btns += `<div style='display:inline-block;text-align:center;margin:8px;'>`;
-      if (cleared.includes(i)) {
-        btns += `<div style='color:#ff9800;font-size:1.3em;margin-bottom:2px;'>★</div>`;
-      }
+      btns += `<div style='color:#4b6cb7;font-size:1.1em;margin-bottom:2px;'>Lv.${level}</div>`;
       btns += `<button onclick=\"startRandomQuiz(${i})\">${i}だん</button></div> `;
     }
     document.getElementById('app').innerHTML = `<h2>ばらばらに　とく</h2><div>やりたい　だんを　えらんでね</div><div>${btns}</div><div id='random-quiz-area'></div><button onclick=\"backHome()\">ホームに　もどる</button>`;
@@ -309,10 +316,17 @@ function answerRandomQuiz(ans) {
     document.getElementById('random-quiz-area').innerHTML = `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${order[current]} = ${correct}</b> だよ<br>もう一回！</div><button onclick=\"renderRandomQuiz()\">もういちど　ちょうせんする</button>`;
   }
 }
-function saveRandomQuizClear(dan) {
-  let cleared = JSON.parse(localStorage.getItem('randomQuizCleared') || '[]');
-  if (!cleared.includes(dan)) cleared.push(dan);
-  localStorage.setItem('randomQuizCleared', JSON.stringify(cleared));
+
+// 段ごとに経験値を加算し保存（バラ問題用）
+function addRandomQuizExp(dan) {
+  let expData = {};
+  try {
+    expData = JSON.parse(localStorage.getItem('randomQuizExp') || '{}');
+  } catch (e) { }
+  expData[dan] = (expData[dan] || 0) + 1;
+  // レベルMAX（100）を超える経験値は加算しない
+  if (expData[dan] > 99) expData[dan] = 99;
+  localStorage.setItem('randomQuizExp', JSON.stringify(expData));
 }
 function backHome() {
   document.getElementById('home').style.display = '';
