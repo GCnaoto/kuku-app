@@ -1,3 +1,135 @@
+function pressTowerTenKey(num) {
+  if (num === -1) {
+    // バックスペース
+    towerTrialState.input = towerTrialState.input.slice(0, -1);
+    renderTowerTrial();
+    return;
+  }
+  const { problems, current } = towerTrialState;
+  const { dan, b } = problems[current];
+  const answer = dan * b;
+  const answerLength = answer.toString().length;
+  if (towerTrialState.input.length < answerLength) {
+    towerTrialState.input += num;
+    // 桁数が揃ったら自動判定
+    if (towerTrialState.input.length === answerLength) {
+      if (parseInt(towerTrialState.input, 10) === answer) {
+        // 正解: 次の階へ
+        towerTrialState.current++;
+        towerTrialState.correctStreak++;
+        towerTrialState.input = '';
+        // 最高到達階数更新
+        if (towerTrialState.correctStreak > towerTrialState.max) {
+          towerTrialState.max = towerTrialState.correctStreak;
+          localStorage.setItem('towerTrialMax', towerTrialState.max);
+        }
+        renderTowerTrial();
+        return;
+      } else {
+        // 不正解: ゲームオーバー
+        showTowerGameOver(dan, b, answer);
+        return;
+      }
+    }
+    renderTowerTrial();
+    return;
+  }
+  renderTowerTrial();
+}
+
+function showTowerGameOver(dan, b, answer) {
+  let maxFloor = towerTrialState.max;
+  let html = `<div class='error'>まちがえちゃった！<br>せいかいは <b>${dan} × ${b} = ${answer}</b> だよ</div>`;
+  html += `<div style='margin:12px 0;'>到達階数: ${towerTrialState.correctStreak}階<br>最高到達階数: ${maxFloor}階</div>`;
+  html += `<button onclick='showTowerTrial()'>もういちど挑戦</button>`;
+  document.getElementById('tower-area').innerHTML = html;
+  document.getElementById('tower-status').textContent = `最高到達階数: ${maxFloor}階`;
+}
+// --- 試練の塔: 問題リスト生成 ---
+function generateTowerProblems() {
+  // 3〜9段のみ
+  let all = [];
+  for (let dan = 3; dan <= 9; dan++) {
+    for (let b = 1; b <= 9; b++) {
+      all.push({ dan, b });
+    }
+  }
+  // missedKukuから間違えやすい順に優先
+  let missed = {};
+  try {
+    missed = JSON.parse(localStorage.getItem('missedKuku') || '{}');
+  } catch (e) { }
+  // missedKukuの出現回数で降順ソート
+  all.sort((a, b) => {
+    const ka = missed[`${a.dan}x${a.b}`] || 0;
+    const kb = missed[`${b.dan}x${b.b}`] || 0;
+    return kb - ka;
+  });
+  // 100問分をランダムに（ただしmissed上位は先頭に）
+  let topMissed = all.slice(0, 30); // 上位30問は必ず含める
+  let rest = all.slice(30);
+  rest = shuffle(rest);
+  // topMissedもシャッフルしてから結合することで、全体がバラバラになる
+  topMissed = shuffle(topMissed);
+  let problems = topMissed.concat(rest).slice(0, 100);
+  return problems;
+}
+// --- 試練の塔: 進行・UI ---
+function renderTowerTrial() {
+  const { current, problems, input, correctStreak, max } = towerTrialState;
+  if (current >= problems.length) {
+    // 100問クリア
+    let newMax = Math.max(max, 100);
+    localStorage.setItem('towerTrialMax', newMax);
+    document.getElementById('tower-area').innerHTML = `<div class='clear'>おめでとう！100階制覇！</div><button onclick='showTowerTrial()'>もういちど挑戦</button>`;
+    document.getElementById('tower-status').textContent = `最高到達階数: ${newMax}階`;
+    return;
+  }
+  const { dan, b } = problems[current];
+  let html = `<div style='font-size:1.2em;margin-bottom:8px;'>${current + 1}階 / 100階</div>`;
+  html += `<h3>${dan} × ${b} = ?</h3>`;
+  html += `<div style='font-size:2em;margin:12px 0;'>${input || '&nbsp;'}</div>`;
+  html += renderTowerTenKey();
+  html += `<div class='progress'>連続正解: ${correctStreak}階</div>`;
+  document.getElementById('tower-area').innerHTML = html;
+}
+
+function renderTowerTenKey() {
+  let html = `<div id='tenkey-area' style='display:inline-block;'>`;
+  const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  for (let i = 0; i < 9; i++) {
+    if (i % 3 === 0) html += '<div>';
+    html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTowerTenKey(${keys[i]})'>${keys[i]}</button>`;
+    if (i % 3 === 2) html += '</div>';
+  }
+  html += `<div>`;
+  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTowerTenKey(0)'>0</button>`;
+  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTowerTenKey(-1)'>⌫</button>`;
+  html += `</div>`;
+  html += `</div>`;
+  return html;
+}
+// --- 試練の塔モード ---
+let towerTrialState = { current: 0, max: 0, problems: [], input: '', correctStreak: 0 };
+function showTowerTrial() {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  // 最高到達階数の取得
+  let maxFloor = 0;
+  try {
+    maxFloor = parseInt(localStorage.getItem('towerTrialMax') || '0', 10);
+  } catch (e) { }
+  towerTrialState = { current: 0, max: maxFloor, problems: [], input: '', correctStreak: 0 };
+  // 問題リスト生成（1,2段除外・missed優先）
+  towerTrialState.problems = generateTowerProblems();
+  let html = `<h2>試練の塔</h2>`;
+  html += `<div style='margin-bottom:12px;'>1問でも間違えたら終了！</div>`;
+  html += `<div id='tower-status'>最高到達階数: ${maxFloor}階</div>`;
+  html += `<div id='tower-area'></div>`;
+  html += `<button onclick='backHome()'>ホームに　もどる</button>`;
+  document.getElementById('app').innerHTML = html;
+  renderTowerTrial();
+}
 // --- バラ九九（入力式）用 段ごとレベル管理 ---
 function getInputQuizExpData() {
   let expData = {};
