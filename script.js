@@ -1,3 +1,48 @@
+// ===== 共通ユーティリティ =====
+
+// 九九の問題リストを生成（danFrom〜danTo, bFrom〜bTo）
+function generateKukuProblems(danFrom = 1, danTo = 9, bFrom = 1, bTo = 9) {
+  const list = [];
+  for (let dan = danFrom; dan <= danTo; dan++) {
+    for (let b = bFrom; b <= bTo; b++) {
+      list.push({ dan, b });
+    }
+  }
+  return list;
+}
+
+// missedKuku（間違えやすい問題記録）を取得
+function getMissedKuku() {
+  try {
+    return JSON.parse(localStorage.getItem('missedKuku') || '{}');
+  } catch (e) { return {}; }
+}
+
+// 配列シャッフル
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// テンキーUI生成（コールバック名を指定）
+function renderTenKeyUI(callbackName) {
+  let html = `<div id='tenkey-area' style='display:inline-block;'>`;
+  const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  for (let i = 0; i < 9; i++) {
+    if (i % 3 === 0) html += '<div>';
+    html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='${callbackName}(${keys[i]})'>${keys[i]}</button>`;
+    if (i % 3 === 2) html += '</div>';
+  }
+  html += `<div>`;
+  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='${callbackName}(0)'>0</button>`;
+  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='${callbackName}(-1)'>⌫</button>`;
+  html += `</div>`;
+  html += `</div>`;
+  return html;
+}
 function pressTowerTenKey(num) {
   if (num === -1) {
     // バックスペース
@@ -47,30 +92,20 @@ function showTowerGameOver(dan, b, answer) {
 }
 // --- 試練の塔: 問題リスト生成 ---
 function generateTowerProblems() {
-  // 3〜9段のみ
-  let all = [];
-  for (let dan = 3; dan <= 9; dan++) {
-    for (let b = 1; b <= 9; b++) {
-      all.push({ dan, b });
-    }
-  }
+  // 3〜9段の九九リストを生成
+  let all = generateKukuProblems(3, 9, 1, 9);
   // missedKukuから間違えやすい順に優先
-  let missed = {};
-  try {
-    missed = JSON.parse(localStorage.getItem('missedKuku') || '{}');
-  } catch (e) { }
-  // missedKukuの出現回数で降順ソート
+  let missed = getMissedKuku();
   all.sort((a, b) => {
     const ka = missed[`${a.dan}x${a.b}`] || 0;
     const kb = missed[`${b.dan}x${b.b}`] || 0;
     return kb - ka;
   });
   // 100問分をランダムに（ただしmissed上位は先頭に）
-  let topMissed = all.slice(0, 30); // 上位30問は必ず含める
+  let topMissed = all.slice(0, 30);
+  topMissed = shuffle(topMissed);
   let rest = all.slice(30);
   rest = shuffle(rest);
-  // topMissedもシャッフルしてから結合することで、全体がバラバラになる
-  topMissed = shuffle(topMissed);
   let problems = topMissed.concat(rest).slice(0, 100);
   return problems;
 }
@@ -95,19 +130,8 @@ function renderTowerTrial() {
 }
 
 function renderTowerTenKey() {
-  let html = `<div id='tenkey-area' style='display:inline-block;'>`;
-  const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-  for (let i = 0; i < 9; i++) {
-    if (i % 3 === 0) html += '<div>';
-    html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTowerTenKey(${keys[i]})'>${keys[i]}</button>`;
-    if (i % 3 === 2) html += '</div>';
-  }
-  html += `<div>`;
-  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTowerTenKey(0)'>0</button>`;
-  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTowerTenKey(-1)'>⌫</button>`;
-  html += `</div>`;
-  html += `</div>`;
-  return html;
+  // テンキーUI（共通関数利用）
+  return renderTenKeyUI('pressTowerTenKey');
 }
 // --- 試練の塔モード ---
 let towerTrialState = { current: 0, max: 0, problems: [], input: '', correctStreak: 0 };
@@ -188,26 +212,13 @@ function renderInputQuiz() {
   let yomi = fullYomi.split(/\s*(が|じゅう|にじゅう|さんじゅう|しじゅう|ごじゅう|ろくじゅう|しちじゅう|はちじゅう)/)[0].trim();
   html += `<div class='yomi'>${yomi}</div>`;
   html += `<div style='font-size:2em;margin:12px 0;'>${input || '&nbsp;'}</div>`;
-  html += renderTenKey();
+  html += renderTenKeyUI('pressTenKey');
   html += `<div class='progress'>あと ${9 - correctCount}もん！</div>`;
   document.getElementById('input-quiz-area').innerHTML = html;
 }
 function renderTenKey() {
-  // テンキーUI
-  let html = `<div id='tenkey-area' style='display:inline-block;'>`;
-  const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-  for (let i = 0; i < 9; i++) {
-    if (i % 3 === 0) html += '<div>';
-    html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(${keys[i]})'>${keys[i]}</button>`;
-    if (i % 3 === 2) html += '</div>';
-  }
-  // 0とバックスペースを横並びで
-  html += `<div>`;
-  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(0)'>0</button>`;
-  html += `<button style='width:60px;height:60px;font-size:1.5em;margin:4px;' onclick='pressTenKey(-1)'>⌫</button>`;
-  html += `</div>`;
-  html += `</div>`;
-  return html;
+  // 非推奨: 旧テンキーUI（今後はrenderTenKeyUIを使うこと）
+  return renderTenKeyUI('pressTenKey');
 }
 function pressTenKey(num) {
   if (num === -1) {
